@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const multer = require('multer')
 const app = express()
 const port = 3000
 
@@ -13,7 +14,6 @@ app.use(cors());
 app.use(express.json());
 
 app.post('/', async (req, res) => {
-  const resumedata = req.body;
   // code for checking resume score
 })
 
@@ -98,11 +98,35 @@ app.post('/applyjob', async (req, res) => {
   res.status(200).send("done");
 })
 
-app.post('/uploadresume', async (req, res) => {
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now());
+  }
+});
 
-  console.log(req.body);
-  const jobs = db.collection('jobs');
-  const user = await db.collection('users').findOne({email: req.body.email});
+const upload = multer({ storage: storage });
+
+app.post('/uploadresume', upload.single('resume'), async (req, res) => {
+
+  const fs = require('fs');
+  const resume = db.collection('resume');
+  const data = fs.readFileSync(req.file.path);
+
+  resume.insertOne({
+    email: req.headers.email,
+    filename: req.file.originalname,
+    contentType: req.file.mimetype,
+    size: req.file.size,
+    pdf: {
+      data: data,
+      contentType: req.file.mimetype
+    }
+  });
+
+  fs.unlinkSync(req.file.path);
 
   res.status(200).send("done");
 })

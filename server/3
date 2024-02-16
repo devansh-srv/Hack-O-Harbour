@@ -74,21 +74,29 @@ app.post('/createjob', (req, res) => {
   res.status(200).send("done");
 })
 
-app.post('/applyjob', async (req, res) => {
+app.post('/applyjob', (req, res) => {
 
   console.log(req.body);
-  const jobs = db.collection('jobs');
-  const user = await db.collection('users').findOne({email: "vanshjangir0001@gmail.com"});
-  const pushData = {
-    email: user.email,
-    name: user.username,
-    score: '0',
-    link: "link"
+  const jobs = db.collection('jobs').findOne({ID: "googlebackend"});
+  const user = db.collection('users').findOne({email: "vanshjangir0001@gmail.com"});
+  console.log(jobs);
+  const userscore = 0;
+
+  if(jobs['participants'][0] = null){
+    res.status(200).send("hell");
+  }else{
+    jobs['participants'].push(
+      {
+        email: user.username,
+        name: user.username,
+        score: "0",
+        link: "link",
+      }
+    )
   }
-  jobs.updateOne(
-    {ID: req.body.jobid},
-    {$push: {participants: pushData}}
-  );
+  
+
+
   res.status(200).send("done");
 })
 

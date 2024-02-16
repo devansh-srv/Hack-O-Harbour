@@ -1,11 +1,9 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 const Login = () => {
 
   const [Uemail, setEmail] = useState("");
   const [Upassword, setPassword] = useState("");
-  const nav = useNavigate();
 
   const submit = async () => {
     const response = await fetch('http://localhost:3000/login', {
@@ -23,6 +21,11 @@ const Login = () => {
     const json = await response.json();
     if(status === 200){
       console.log("login success");
+      if(json.type == 'company'){
+        localStorage.setItem('Company', JSON.stringify(json.username));
+      }else{
+        localStorage.setItem('applicant', JSON.stringify(json.username));
+      }
     }
     else{
       console.log("incorrect login credentials");
@@ -33,8 +36,6 @@ const Login = () => {
   return(
     <div>
       <h1>Login</h1>
-
-      <form>
       <label>
         <p>Username</p>
         <input type="text" onChange={(e) => setEmail(e.target.value)} />
@@ -46,7 +47,6 @@ const Login = () => {
       <div>
         <button type="submit" onClick={submit}>Submit</button>
       </div>
-    </form>
     </div>
   )
 }

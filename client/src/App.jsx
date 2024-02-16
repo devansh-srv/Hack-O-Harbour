@@ -7,6 +7,7 @@ import Company from './components/Company'
 import Jobs from './components/Jobs'
 import Createjob from './components/Createjob'
 import Jobstatus from './components/Jobstatus'
+import Applicant from './components/Applicant'
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home/>}></Route>
+        <Route path="/applicant" element={<Applicant/>}></Route>
         <Route path="/login" element={<Login/>}></Route>
         <Route path="/signup" element={<Signup/>}></Route>
         <Route path="/jobs" element={<Jobs/>}></Route>

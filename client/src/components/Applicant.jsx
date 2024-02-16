@@ -8,7 +8,15 @@ const Home = () => {
 
   return(
     <div className="App">
-      <h1> ATS </h1>
+    <form>
+      <h1>Upload Resume</h1>
+      <input type="file" />
+      <button type="submit">Upload</button>
+    </form>
+
+    <div>
+      score = {score}
+    </div>
   </div>
   )
 }

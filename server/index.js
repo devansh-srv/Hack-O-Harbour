@@ -1,4 +1,5 @@
-const express = require('express')
+const express = require('express');
+const cors = require('cors');
 const app = express()
 const port = 3000
 
@@ -8,6 +9,7 @@ const uri = 'mongodb+srv://hackOharbour:D1kVfg4XSaaq3sUX@cluster0.g1ic6ja.mongod
 const client = new MongoClient(uri);
 const db = client.db('hackOharbour');
 
+app.use(cors());
 app.use(express.json());
 
 app.post('/', async (req, res) => {
@@ -20,6 +22,8 @@ app.post('/login', async (req, res) => {
   const userdata = req.body;
   const users = db.collection('users');
   const userarr = await users.find({}).toArray();
+
+  console.log(userdata);
 
   const foundUser = userarr.find(x => x.email === userdata.email);
   if(foundUser){
@@ -39,6 +43,8 @@ app.post('/signup', async (req, res) => {
   const db = client.db('hackOharbour');
   const users = db.collection('users');
   const userarr = await users.find({}).toArray();
+  
+  console.log(userdata);
   
   const foundUser = userarr.find(x => x.email === userdata.email);
   if(foundUser){
@@ -78,7 +84,7 @@ app.post('/applyjob', async (req, res) => {
 
   console.log(req.body);
   const jobs = db.collection('jobs');
-  const user = await db.collection('users').findOne({email: "vanshjangir0001@gmail.com"});
+  const user = await db.collection('users').findOne({email: req.body.email});
   const pushData = {
     email: user.email,
     name: user.username,
@@ -89,6 +95,15 @@ app.post('/applyjob', async (req, res) => {
     {ID: req.body.jobid},
     {$push: {participants: pushData}}
   );
+  res.status(200).send("done");
+})
+
+app.post('/uploadresume', async (req, res) => {
+
+  console.log(req.body);
+  const jobs = db.collection('jobs');
+  const user = await db.collection('users').findOne({email: req.body.email});
+
   res.status(200).send("done");
 })
 

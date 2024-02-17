@@ -1,6 +1,6 @@
-pip install scikit-learn
-pip install nltk
-pip install gensium
-pip install docx2txt
-pip install pypdf2
+scikit-learn
+nltk
+gensim
+docx2txt
+pypdf2
 

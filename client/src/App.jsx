@@ -8,6 +8,7 @@ import Jobs from './components/Jobs'
 import Createjob from './components/Createjob'
 import Jobstatus from './components/Jobstatus'
 import Applicant from './components/Applicant'
+import Skilltest from './components/Skilltest'
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
         <Route path="/company" element={<Company/>}></Route>
         <Route path="/createjob" element={<Createjob/>}></Route>
         <Route path="/jobstatus" element={<Jobstatus/>}></Route>
+        <Route path="/skilltest" element={<Skilltest/>}></Route>
       </Routes>
     </Router>
   )

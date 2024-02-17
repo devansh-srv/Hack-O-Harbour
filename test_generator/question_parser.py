@@ -59,5 +59,4 @@ for a in list:
         list_element.append(Q_list)
 
 # print(Q_list)
-
 # Q_List structure [[qno,'ques',{option},{ans}]]

@@ -83,7 +83,8 @@ app.post('/applyjob', async (req, res) => {
     return res.status(404).send("resume not found");
   }
 
-  const score ="90" //await executePython('../model/pyfiles/filter.py', './resume.pdf', './jobdesc.pdf');
+  const score = await executePython('filter.py', 'resume.pdf', 'jobdesc.pdf');
+  console.log(score);
 
   const pushData = {
     email: user.email,
@@ -194,6 +195,12 @@ app.get('/jobstatus:id', async (req, res) => {
   }else{
     res.status(404).send("job not found");
   }
+})
+
+app.get('/gettest:id', async (req, res) => {
+  const id = req.params.id.slice(1);
+  const questarr = await db.collection('jobs').findOne({ID: id});
+  res.status(200).json(questarr.test);
 })
 
 const executePython = async (script, arg) => {

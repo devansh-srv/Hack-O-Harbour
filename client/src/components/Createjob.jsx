@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import './Company.css';
+//  import './Createjob.css';
 import ComNavbar from './ComNavbar'
 const Createjob = () => {
 
@@ -35,26 +35,28 @@ const Createjob = () => {
   return(
     <>
     <ComNavbar/>
-    <div>
+    <div className="signup">
+    <div className="scontainer">
       <h1>Create a Job</h1>
 
       <form>
-      <label>
+      <label className="sl">
         <p>Enter a Title</p>
-        <input type="text" onChange={(e) => setTitle(e.target.value)} />
+        <input  className="binp"type="text" onChange={(e) => setTitle(e.target.value)} />
       </label>
-      <label>
+      <label className="sl">
         <p>Enter ID</p>
-        <input type="text" onChange={(e) => setID(e.target.value)} />
+        <input className="binp" type="text" onChange={(e) => setID(e.target.value)} />
       </label>
       <label>
         <p>job description </p>
-        <input type="text" onChange={(e) => setDesc(e.target.value)} />
+        <input className="binp" type="text" onChange={(e) => setDesc(e.target.value)} />
       </label>
       <div>
-        <button type="submit" onClick={submit}>Submit</button>
+        <button className="sb" type="submit" onClick={submit}>Submit</button>
       </div>
     </form>
+    </div>
     </div>
     </>
   )

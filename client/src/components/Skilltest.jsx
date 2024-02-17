@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import './Skilltest.css';
+import Navbar from './Navbar'
 const Skilltest = () => {
 
   const [data, setData] = useState(
     [
       {
-        question: "hello",
+        question: "Which of the following is a built-in function in Python that returns a tuple containing the minimum and maximum elements of a list?",
         no: 1,
         options: {
           a: "f",
@@ -56,25 +57,31 @@ const Skilltest = () => {
   },[])
 
   return(
+    <>    
+    <Navbar/>
     <div className="skilltest">
       <h1>SkillTest</h1>
-      <div >
-        <ul>
+      <div className="test">
+        <ul className="list">
           {data.map(item => (
+            <>
             <div>
             <li key={item.question}>
-              {item.no}{item.question}
+              {item.no}{item.question}  
               <p>a: {item.options.a}</p>
               <p>b: {item.options.b}</p>
               <p>c: {item.options.c}</p>
               <p>d: {item.options.d}</p>
             </li>
-            <input type="text" onChange={(e)=>ansarr[int(item.no)-1] = e.target.value}></input>
             </div>
+            <input type="text" onChange={(e)=>ansarr[int(item.no)-1] = e.target.value}></input>
+            </>
           ))}
         </ul>
       </div>
     </div>
+    </>
+
   )
 }
 

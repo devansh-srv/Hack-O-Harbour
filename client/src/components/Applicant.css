@@ -1,7 +1,8 @@
 /* Add this to your existing CSS or create a new CSS file */
 
 .App {
-    padding: 20px;
+    padding: 100px;
+    margin-bottom: 75px;
     justify-content: space-around;
     align-items: center;
     height: 40vh; /* Adjust the height as needed */

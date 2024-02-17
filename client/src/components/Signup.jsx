@@ -38,7 +38,9 @@ const Signup = () => {
 
   return(
     <div className="signup">
-      <h1>SignUp</h1>
+      
+      <div className="scontainer">
+        <h1>SignUp</h1>
       <label className="sl">
         <p>Username</p>
         <input className="binp" type="text" onChange={(e) => setUsername(e.target.value)} />
@@ -61,6 +63,7 @@ const Signup = () => {
       </label>
       <div >
         <button className="sb" type="submit" onClick={submit}>Submit</button>
+      </div>
       </div>
     </div>
   )

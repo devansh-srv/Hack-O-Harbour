@@ -1,0 +1,33 @@
+/* Skilltest.css */
+
+.skilltest {
+    text-align: center;
+  }
+  
+  .test {
+    position: absolute;
+    margin-top: 50px;
+    margin: 0 auto;
+  }
+  
+  .list {
+    list-style-type: none;
+    padding: 15px;
+  }
+  
+  .list li {
+    background-color: white;
+
+    /* width: 10px; */
+    text-align: left;
+    justify-content: left;
+    margin-bottom: 20px;
+    margin-left: 8px;
+    padding: 15px;
+  }
+  
+  input {
+    margin: 10px;
+    box-sizing: border-box;
+  }
+  

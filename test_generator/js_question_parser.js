@@ -19,13 +19,20 @@ for (const part of parts) {
             // Split the part into question and options
             const [part_q, part_opt] = part.split('!@#opt');
 
-            // Extract question number and question text
-            const [q_no, question] = part_q.split('\n', 2);
-            list_element.push(parseInt(q_no));
-            list_element.push(question.trim());
+            const firstSpaceIndex = part_q.indexOf('\n');
+            const q_no = part_q.slice(0, firstSpaceIndex);    
+            const question = part_q.slice(firstSpaceIndex + 1);
+        
 
             // Split the options part into options and answer
             const [option_string, ans_string] = part_opt.split('!@#ans');
+
+            let i = 0;
+            let answer = ans_string[i];
+            while (!['a', 'b', 'c', 'd', 'A', 'B', 'C', 'D'].includes(answer)) {
+                i++;
+                answer = ans_string[i];
+            }
 
             // Split options into an array
             const option_list = option_string.split('\n');
@@ -38,15 +45,18 @@ for (const part of parts) {
                 }
             }
 
-            list_element.push(options_dict);
 
-            // Store the answer as a string
-            list_element.push(ans_string[1]);
+            const questionObj = {
+                question_no: parseInt(q_no),
+                question: question.trim(),
+                options: options_dict,
+                correct: answer
+            };
 
-            // Add the list element to Q_list
-            Q_list.push(list_element);
+            // Add the object element to Q_list
+            Q_list.push(questionObj);
 
-            console.log(list_element);
+            // console.log(list_element);
         } catch (error) {
             console.error('Error parsing part:', part);
         }

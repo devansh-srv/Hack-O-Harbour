@@ -10,6 +10,7 @@ from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 from sklearn.metrics.pairwise import cosine_similarity
 from gensim.models import Word2Vec
+from gensim.models import KeyedVectors
 resume  = docx2txt.process('../examples/gpt-Python_resume.docx')
 job = docx2txt.process('../examples/python-job-description.docx')
 def preprocess_text(text):
@@ -30,15 +31,31 @@ def average_word_vectors(tokens, model):
         return None
 resume_token = preprocess_text(resume)
 job_token = preprocess_text(job)
+google_model_path = "../GoogleNews-vectors-negative300.bin"
+google_model = KeyedVectors.load_word2vec_format(google_model_path, binary=True)
+def get_vector_for_token(token, model):
+    try:
+        return model[token]
+    except KeyError:
+        # print(f"Token '{token}' not present in the model's vocabulary.")
+        return None
 # processing vector average
-combined_tokens = [resume_token, job_token]
-model = Word2Vec(sentences=combined_tokens, vector_size=100, window=5, min_count=1, workers=4)
-resume_vector = average_word_vectors(resume_token, model = model)
-job_description_vector = average_word_vectors(job_token, model = model)
+resume_vectors = [get_vector_for_token(token, google_model) for token in resume_token]
+job_description_vectors = [get_vector_for_token(token, google_model) for token in job_token]
 
-if resume_vector is not None and job_description_vector is not None:
-    # Calculate cosine similarity
-    similarity_score = cosine_similarity([resume_vector], [job_description_vector])[0][0]
-    print('Similarity score:', similarity_score*100)
+# Remove None values from the lists
+resume_vectors = [vec for vec in resume_vectors if vec is not None]
+job_description_vectors = [vec for vec in job_description_vectors if vec is not None]
+
+# Calculate the average vectors
+if resume_vectors and job_description_vectors:
+    resume_vector = sum(resume_vectors) / len(resume_vectors)
+    job_description_vector = sum(job_description_vectors) / len(job_description_vectors)
+    
+    similarity_score = cosine_similarity([resume_vector], [job_description_vector])[0, 0]
+    similarity_percentage = (similarity_score + 1) * 50  # Scale to the range [0, 100]
+    print("Similarity Score:", similarity_score)
+    print("Similarity Percentage:", similarity_percentage)
 else:
-    print("One or both documents contain no tokens in the Word2Vec model vocabulary.")
+    print("No vectors found for tokens.")
+

@@ -1,3 +1,5 @@
+import sys
+from PyPDF2 import PdfReader
 import google.generativeai as genai
 # !@#$*
 
@@ -11,8 +13,9 @@ model = genai.GenerativeModel('gemini-pro')
 # f = open("jobquery.txt", "r")
 # text = f.read()
 # desc_query = text
-
-desc_query = "Give me 10 extremely difficult mcq questions on python, flask, mongodb"
+job_desc = PdfReader(sys.argv[1]).pages[0].extract_text() 
+desc_query = "give 5 extremely difficult technical mcq questions for the person we are looking to hire based on the following job description" + job_desc 
+# desc_query = "Give me 10 extremely difficult mcq questions on python, flask, mongodb"
 question = "Give me 5 extremely difficult python mcq questions"
 context = "(with question number) separate each question with !@#ques (print this separator just before question number) \
 and separate questions from options from question with !@#opt (print the options like a), b) ) and print correct answer \

@@ -22,9 +22,9 @@ const Login = () => {
     if(status === 200){
       console.log("login success");
       if(json.type == 'company'){
-        localStorage.setItem('Company', JSON.stringify(json.username));
+        localStorage.setItem('Company', JSON.stringify(json.email));
       }else{
-        localStorage.setItem('applicant', JSON.stringify(json.username));
+        localStorage.setItem('applicant', JSON.stringify(json.email));
       }
     }
     else{

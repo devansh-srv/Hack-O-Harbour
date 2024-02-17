@@ -1,4 +1,4 @@
-pip isntall scikit-learn
+pip install scikit-learn
 pip install nltk
 pip install gensium
 pip install docx2txt

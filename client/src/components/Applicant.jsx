@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import Navbar from './Navbar'
+import './Applicant.css'
 
 const Home = () => {
 
@@ -31,14 +33,19 @@ const Home = () => {
   };
 
   return(
+    <>
+      <Navbar/>
+
     <div className="App">
       <h1>Upload Resume</h1>
-      <input type="file" name="resume" onChange={handleFileChange}/>
-      <button type="submit" onClick={fileUpload}>Upload</button>
-    <div>
-      score = {score}
-    </div>
+      <input className ='appinp'type="file" name="resume" onChange={handleFileChange}/>
+      <button className='appbut' type="submit" onClick={fileUpload}>Upload</button>
   </div>
+
+    <h1>
+      SCORE = {score}
+    </h1>
+  </>
   )
 }
 

@@ -3,8 +3,10 @@ const cors = require('cors');
 const multer = require('multer')
 const app = express()
 const port = 3000
+const { spawn } = require('child_process');
+const fs = require('fs');
 
-const {MongoClient} = require('mongodb')
+const {MongoClient, GridFSStream} = require('mongodb')
 const uri = 'mongodb+srv://hackOharbour:D1kVfg4XSaaq3sUX@cluster0.g1ic6ja.mongodb.net/?retryWrites=true&w=majority';
 
 const client = new MongoClient(uri);
@@ -23,12 +25,10 @@ app.post('/login', async (req, res) => {
   const users = db.collection('users');
   const userarr = await users.find({}).toArray();
 
-  console.log(userdata);
-
   const foundUser = userarr.find(x => x.email === userdata.email);
   if(foundUser){
     if(foundUser.password === userdata.password){
-      res.status(200).json({message: "login success"});
+      res.status(200).json(foundUser);
     }else{
       res.status(401).json({message: "Incorrect password"});
     }
@@ -43,8 +43,6 @@ app.post('/signup', async (req, res) => {
   const db = client.db('hackOharbour');
   const users = db.collection('users');
   const userarr = await users.find({}).toArray();
-  
-  console.log(userdata);
   
   const foundUser = userarr.find(x => x.email === userdata.email);
   if(foundUser){
@@ -82,21 +80,66 @@ app.post('/createjob', (req, res) => {
 
 app.post('/applyjob', async (req, res) => {
 
-  console.log(req.body);
   const jobs = db.collection('jobs');
+  const resume = await db.collection('resume').findOne({email: req.body.email});
   const user = await db.collection('users').findOne({email: req.body.email});
+  if(!resume){
+    return res.status(404).send("resume not found");
+  }
+
+  const score ="90" //await executePython('../model/pyfiles/filter.py', './resume.pdf', './jobdesc.pdf');
+
   const pushData = {
     email: user.email,
     name: user.username,
-    score: '0',
+    score: score,
     link: "link"
   }
+
   jobs.updateOne(
-    {ID: req.body.jobid},
+    {ID: req.body.job.id},
     {$push: {participants: pushData}}
   );
   res.status(200).send("done");
 })
+
+function retrievePDF(collectionName, email) {
+  const gfs = new GridFSStream(db, { collection: collectionName });
+
+  gfs.files.findOne({ email: email }, (err, file) => {
+    if (err) {
+      console.error('Error finding PDF:', err);
+      return;
+    }
+
+    if (!file) {
+      console.error('PDF not found with ID:', pdfId);
+      return;
+    }
+
+    const readStream = gfs.createReadStream({
+      _id: file._id,
+      filename: file.filename
+    });
+
+    let pdfData = '';
+    readStream.on('data', (chunk) => {
+      pdfData += chunk.toString('binary'); // Ensure 'binary' encoding
+    });
+    readStream.on('error', (err) => {
+      console.error('Error reading PDF:', err);
+    });
+    readStream.on('end', () => {
+      const pdfString = Buffer.from(pdfData, 'binary').toString('base64'); // Convert to base64 string
+      console.log('PDF retrieved and converted to string:', pdfString);
+
+      // Now you can use the `pdfString` variable for further processing
+      // Close the connection after using the string
+      return pdfString;
+    });
+  });
+}
+
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -138,9 +181,8 @@ app.get('/jobs', async (req, res) => {
   let resarr = [];
 
   for (let i=0; i<jobsarr.length; i++){
-    resarr.push({title: jobsarr[i].title, company: jobsarr[i].company, desc: jobsarr[i].description});
+    resarr.push({id: jobsarr[i].ID, title: jobsarr[i].title, company: jobsarr[i].company, desc: jobsarr[i].description});
   }
-
   res.status(200).json(resarr);
 })
 
@@ -156,6 +198,34 @@ app.get('/jobstatus:id', async (req, res) => {
     res.status(404).send("job not found");
   }
 })
+
+const executePython = async (script, arg) => {
+  const arguments = arg.toString();
+
+  const py = spawn("python", [script, arguments]);
+
+  const result = await new Promise((resolve, reject) => {
+    let output;
+
+      py.stdout.on('data', (data) => {
+        output = data.toString();
+      });
+
+      py.stderr.on("data", (data) => {
+        console.error(`[python] Error occured: ${data}`);
+        reject(`Error occured in ${script}`);
+      });
+
+      py.on("exit", (code) => {
+        console.log(`Child process exited with code ${code}`);
+        resolve(output);
+      });
+  });
+
+  return result;
+}
+
+
 
 app.listen(port, () => {
   console.log(`listening on port ${port}`)

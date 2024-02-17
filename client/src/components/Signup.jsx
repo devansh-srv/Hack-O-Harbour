@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import './Signup.css';
+
 const Signup = () => {
   
   const [Semail, setEmail] = useState("");
@@ -28,31 +30,31 @@ const Signup = () => {
   }
 
   return(
-    <div>
+    <div className="signup">
       <h1>SignUp</h1>
-      <form>
-      <label>
+      <form className="scontainer">
+      <label className="sl">
         <p>Username</p>
-        <input type="text" onChange={(e) => setUsername(e.target.value)} />
+        <input className="binp" type="text" onChange={(e) => setUsername(e.target.value)} />
       </label>
-      <label>
+      <label className="sl">
         <p>Password</p>
-        <input type="password" onChange={(e) => setPassword(e.target.value)} />
+        <input className="binp"type="password" onChange={(e) => setPassword(e.target.value)} />
       </label>
-      <label>
+      <label className="sl">
         <p>Email</p>
-        <input type="email" onChange={(e) => setEmail(e.target.value)} />
+        <input className="binp" type="email" onChange={(e) => setEmail(e.target.value)} />
       </label>
-      <label>
+      <label className="sl">
         <p>Signup as a :</p> 
-        <select name="mode" id="mode" onChange={(e) => setType(e.target.value)}>
+        <select className="ss" name="mode" id="mode" onChange={(e) => setType(e.target.value)}>
           <option value="none">none</option>
           <option value="recruiter">recruiter</option>
           <option value="applicant">applicant</option>
         </select>
       </label>
-      <div>
-        <button type="submit" onClick={submit}>Submit</button>
+      <div >
+        <button className="sb" type="submit" onClick={submit}>Submit</button>
       </div>
     </form>
     </div>

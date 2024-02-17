@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import Navbar from './Navbar'
+
 
 const Jobs = () => {
   const [data, setData] = useState([]);
@@ -47,6 +49,7 @@ const Jobs = () => {
 
   return(
   <div>
+    <Navbar/>
     <h1>Jobs </h1>
     <ul>
       {data.map(item => (

@@ -1,4 +1,7 @@
-import { useState } from "react";
+import {useState} from "react";
+import { useNavigate } from "react-router-dom";
+import './Login.css';
+
 
 const Login = () => {
 
@@ -34,18 +37,20 @@ const Login = () => {
   }
 
   return(
-    <div>
+    <div className="login">
       <h1>Login</h1>
-      <label>
-        <p>Username</p>
-        <input type="text" onChange={(e) => setEmail(e.target.value)} />
-      </label>
-      <label>
-        <p>Password</p>
-        <input type="password" onChange={(e) => setPassword(e.target.value)} />
-      </label>
-      <div>
-        <button type="submit" onClick={submit}>Submit</button>
+      <div classname="lcontainer">
+        <label className="l">
+          <p>Username</p>
+          <input className="linp" type="text" onChange={(e) => setEmail(e.target.value)} />
+        </label>
+        <label className="l">
+          <p>Password</p>
+          <input className="linp" type="password" onChange={(e) => setPassword(e.target.value)} />
+        </label>
+        <div>
+          <button className="lb"type="submit" onClick={submit}>Submit</button>
+        </div>
       </div>
     </div>
   )

@@ -1,4 +1,4 @@
-f = open("Sample ques4.txt", "r")
+f = open(r"Hack-O-Harbour\test_generator\Sample\Sample ques3.txt", "r")
 text = f.read()
 # print(text)
 list = text.split("!@#ques")

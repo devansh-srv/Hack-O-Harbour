@@ -10,8 +10,8 @@ from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 from sklearn.metrics.pairwise import cosine_similarity
 from gensim.models import Word2Vec
-resume  = docx2txt.process('gpt-Python_resume.docx')
-job = docx2txt.process('python-job-description.docx')
+resume  = docx2txt.process('../examples/gpt-Python_resume.docx')
+job = docx2txt.process('../examples/python-job-description.docx')
 def preprocess_text(text):
   tokens = word_tokenize(text.lower())
   stop_words = set(stopwords.words('english'))

@@ -1,4 +1,6 @@
-const express = require('express')
+const express = require('express');
+const cors = require('cors');
+const multer = require('multer')
 const app = express()
 const port = 3000
 
@@ -8,10 +10,10 @@ const uri = 'mongodb+srv://hackOharbour:D1kVfg4XSaaq3sUX@cluster0.g1ic6ja.mongod
 const client = new MongoClient(uri);
 const db = client.db('hackOharbour');
 
+app.use(cors());
 app.use(express.json());
 
 app.post('/', async (req, res) => {
-  const resumedata = req.body;
   // code for checking resume score
 })
 
@@ -20,6 +22,8 @@ app.post('/login', async (req, res) => {
   const userdata = req.body;
   const users = db.collection('users');
   const userarr = await users.find({}).toArray();
+
+  console.log(userdata);
 
   const foundUser = userarr.find(x => x.email === userdata.email);
   if(foundUser){
@@ -39,6 +43,8 @@ app.post('/signup', async (req, res) => {
   const db = client.db('hackOharbour');
   const users = db.collection('users');
   const userarr = await users.find({}).toArray();
+  
+  console.log(userdata);
   
   const foundUser = userarr.find(x => x.email === userdata.email);
   if(foundUser){
@@ -78,7 +84,7 @@ app.post('/applyjob', async (req, res) => {
 
   console.log(req.body);
   const jobs = db.collection('jobs');
-  const user = await db.collection('users').findOne({email: "vanshjangir0001@gmail.com"});
+  const user = await db.collection('users').findOne({email: req.body.email});
   const pushData = {
     email: user.email,
     name: user.username,
@@ -89,6 +95,39 @@ app.post('/applyjob', async (req, res) => {
     {ID: req.body.jobid},
     {$push: {participants: pushData}}
   );
+  res.status(200).send("done");
+})
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now());
+  }
+});
+
+const upload = multer({ storage: storage });
+
+app.post('/uploadresume', upload.single('resume'), async (req, res) => {
+
+  const fs = require('fs');
+  const resume = db.collection('resume');
+  const data = fs.readFileSync(req.file.path);
+
+  resume.insertOne({
+    email: req.headers.email,
+    filename: req.file.originalname,
+    contentType: req.file.mimetype,
+    size: req.file.size,
+    pdf: {
+      data: data,
+      contentType: req.file.mimetype
+    }
+  });
+
+  fs.unlinkSync(req.file.path);
+
   res.status(200).send("done");
 })
 

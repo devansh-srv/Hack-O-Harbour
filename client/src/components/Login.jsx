@@ -3,49 +3,48 @@ import { useNavigate } from "react-router-dom";
 
 const Login = () => {
 
-  const [User, setUser] = useState("");
-  const [Pass, setPass] = useState("");
+  const [Uemail, setEmail] = useState("");
+  const [Upassword, setPassword] = useState("");
   const nav = useNavigate();
+
   const submit = async () => {
-    const response = await fetch('http://localhost:3000/signup', {
+    const response = await fetch('http://localhost:3000/login', {
       method: "POST",
       headers: {
-        'Content-Type': "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        email: Semail,
-        password: Spassword,
-      }),
+        email: Uemail,
+        password: Upassword
+      })
     })
 
-    if(response.status == 200){
-      if(response.body.type=="recruiter"){
-        nav('/Company')
-      }
-      else{
-        nav('/applicant')
-      }
+    const status = response.status;
+    const json = await response.json();
+    if(status === 200){
+      console.log("login success");
     }
+    else{
+      console.log("incorrect login credentials");
+    }
+
   }
-
-
-
 
   return(
     <div>
       <h1>Login</h1>
 
-      <form>    
+      <form>
       <label>
-        <p>Username / Company name</p>
-        <input type="text" onChange={(e) => setUser(e.target.value)} />
+        <p>Username</p>
+        <input type="text" onChange={(e) => setEmail(e.target.value)} />
       </label>
       <label>
         <p>Password</p>
-        <input type="password"  onChange={(e) => setPass(e.target.value)}/>
+        <input type="password" onChange={(e) => setPassword(e.target.value)} />
       </label>
       <div>
-      <button type="button" onClick={submit}>Login</button>
+        <button type="submit" onClick={submit}>Submit</button>
       </div>
     </form>
     </div>

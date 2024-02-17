@@ -17,12 +17,10 @@ const Home = () => {
       <section className="hero">
         <div className="hero-container">
           <div className="column-left">
-            <h1>Send Unlimited Messages</h1>  
+            <h1>Get the job you want!</h1>  
             <p>
-              No contracts or unwanted fees. Exclusive offer for new customers
-              only.
+              No contracts or unwanted fees
             </p>
-            <button>Get Started</button>
           </div>
           <div className="column-right">
             {/* <img

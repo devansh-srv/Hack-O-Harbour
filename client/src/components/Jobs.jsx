@@ -54,7 +54,7 @@ const Jobs = () => {
     <ul>
       {data.map(item => (
         <li key={item.company} onClick={()=>apply(item)}>
-           {item.title}{item.company}{item.desc}
+           {item.title}{item.company}
         </li>
       ))}
     </ul>

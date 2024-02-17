@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import './Signup.css'
 
 const Jobstatus = () => {
   const [data, setData] = useState([]);
 
   const {id} = useLocation();
   const getData = async () => {
-    const response = await fetch(`http://localhost:3000/jobstatus:googlebackend`, {
+    const response = await fetch(`http://localhost:3000/jobstatus:${id}`, {
       method: "GET",
     });
 
@@ -28,8 +29,8 @@ const Jobstatus = () => {
       <ul>
         {data.map(item => (
           <li key={item.id}>
-            {item.name}  {item.mail}  {item.score} 
-            <button>resume</button>
+            {item.name}  {item.email}  {item.score} 
+            <button class="lb">resume</button>
           </li>
         ))}
       </ul>

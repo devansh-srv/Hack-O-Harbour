@@ -6,27 +6,16 @@ const Skilltest = () => {
 
   const [data, setData] = useState(
     [
-      {
-        question: "Which of the following is a built-in function in Python that returns a tuple containing the minimum and maximum elements of a list?",
-        no: 1,
-        options: {
-          a: "f",
-          b: "t",
-          c: "f",
-          d: "t",
-        },
-        ans: 'a',
-      }
     ]
   );
 
   const ansarr = [5];
   const getTest = async () => {
-    const response = await fetch(`http://localhost:3000/gettest:${id}`, {
+    const response = await fetch(`http://localhost:3000/gettest:googlebackend`, {
       method: "GET",
     });
 
-    const json = response.json();
+    const json = await response.json();
     if(response.status === 200){
       setData(json);
     }

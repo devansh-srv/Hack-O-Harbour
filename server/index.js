@@ -5,9 +5,10 @@ const app = express()
 const port = 3000
 const { spawn } = require('child_process');
 const fs = require('fs');
+const CONFIG = require('./config.json');
 
 const {MongoClient, GridFSStream} = require('mongodb')
-const uri = 'mongodb+srv://hackOharbour:D1kVfg4XSaaq3sUX@cluster0.g1ic6ja.mongodb.net/?retryWrites=true&w=majority';
+const uri = CONFIG.mongodburi
 
 const client = new MongoClient(uri);
 const db = client.db('hackOharbour');
@@ -203,7 +204,8 @@ app.get('/jobstatus:id', async (req, res) => {
 
 app.get('/gettest:id', async (req, res) => {
   const id = req.params.id.slice(1);
-  const questarr = await db.collection('jobs').findOne({ID: id});
+  const questarr = await db.collection('jobs').findOne({ID: "rusted"});
+    console.log(questarr);
   res.status(200).json(questarr.test);
 })
 

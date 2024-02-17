@@ -41,10 +41,6 @@ const Home = () => {
       <input className ='appinp'type="file" name="resume" onChange={handleFileChange}/>
       <button className='appbut' type="submit" onClick={fileUpload}>Upload</button>
   </div>
-
-    <h1>
-      SCORE = {score}
-    </h1>
   </>
   )
 }

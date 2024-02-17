@@ -1,6 +1,8 @@
 import docx2txt
 import nltk
 import warnings
+import os 
+import sys
 warnings.filterwarnings('ignore')
 nltk.download('punkt',quiet = True)
 nltk.download('stopwords',quiet = True)
@@ -11,8 +13,10 @@ from nltk.stem import WordNetLemmatizer
 from sklearn.metrics.pairwise import cosine_similarity
 from gensim.models import Word2Vec
 from gensim.models import KeyedVectors
-resume  = docx2txt.process('../examples/gpt-Python_resume.docx')
-job = docx2txt.process('../examples/python-job-description.docx')
+resume_path = sys.argv[1]
+job_path = sys.argv[2]
+resume  = docx2txt.process(resume_path)
+job = docx2txt.process(job_path)
 def preprocess_text(text):
   tokens = word_tokenize(text.lower())
   stop_words = set(stopwords.words('english'))
@@ -55,7 +59,7 @@ if resume_vectors and job_description_vectors:
     similarity_score = cosine_similarity([resume_vector], [job_description_vector])[0, 0]
     similarity_percentage = (similarity_score) * 100
     similarity_percentage = round(similarity_percentage,2)
-    print("Similarity Score:", similarity_percentage)
+    print(similarity_percentage)
     # print("Similarity Percentage:", similarity_percentage)
 else:
     print("No vectors found for tokens.")

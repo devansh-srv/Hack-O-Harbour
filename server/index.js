@@ -60,15 +60,18 @@ app.get('/company:cname', async (req, res) => {
   const jobs = db.collection('jobs');
   const jobsarr = await jobs.find({Company: companyName}).toArray();
 
-    res.status(200).json(jobsarr);
+  res.status(200).json(jobsarr);
 })
 
-app.post('/createjob', (req, res) => {
+app.post('/createjob', async (req, res) => {
   
   const createjob = req.body;
   const jobs = db.collection('jobs');
   
   createjob['participants'] = [null];
+  createjob['test'] = await gettest(await executePythonone('test_generator/test_generator.py', createjob.description));
+
+  console.log(createjob);
 
   jobs.insertOne(createjob);
   res.status(200).send("done");
@@ -83,7 +86,7 @@ app.post('/applyjob', async (req, res) => {
     return res.status(404).send("resume not found");
   }
 
-  const score = await executePython('filter.py', 'resume.pdf', 'jobdesc.pdf');
+  const score = await executePython('filter.py', "resume.pdf", "jobdesc.pdf");
   console.log(score);
 
   const pushData = {
@@ -185,12 +188,13 @@ app.get('/jobs', async (req, res) => {
 
 app.get('/jobstatus:id', async (req, res) => {
     
-  const jobID = req.params.id;
+  const jobID = req.params.id.slice(1);
+  console.log(jobID);
   const jobsarr = await db.collection('jobs').find({}).toArray();
-
-  foundjob = jobsarr.find(x => x.ID === jobID);
+  foundjob = jobsarr.find(x => x.ID === 'googlebackend');
   if(foundjob){
     const dataToSend = (foundjob.participants).sort((a,b) => b.score - a.score)
+    console.log(dataToSend);
     res.status(200).json(dataToSend);
   }else{
     res.status(404).send("job not found");
@@ -203,10 +207,8 @@ app.get('/gettest:id', async (req, res) => {
   res.status(200).json(questarr.test);
 })
 
-const executePython = async (script, arg) => {
-  const arguments = arg.toString();
-
-  const py = spawn("python", [script, arguments]);
+const executePython = async (script, arg1, arg2) => {
+  const py = spawn("python", [script, arg1, arg2]);
 
   const result = await new Promise((resolve, reject) => {
     let output;
@@ -228,6 +230,98 @@ const executePython = async (script, arg) => {
 
   return result;
 }
+
+
+const executePythonone = async (script, arg2) => {
+  const py = spawn("python", [script, arg2]);
+
+  const result = await new Promise((resolve, reject) => {
+    let output;
+
+      py.stdout.on('data', (data) => {
+        output = data.toString();
+      });
+
+      py.stderr.on("data", (data) => {
+        console.error(`[python] Error occured: ${data}`);
+        reject(`Error occured in ${script}`);
+      });
+
+      py.on("exit", (code) => {
+        console.log(`Child process exited with code ${code}`);
+        resolve(output);
+      });
+  });
+
+  return result;
+}
+
+
+
+
+async function gettest(text){
+    const Q_list = [];
+    const parts = text.split('!@#ques');
+
+    for (const part of parts) {
+        const list_element = [];
+    
+        // Check if the part contains options
+        if (part.includes('!@#opt')) {
+            try {
+                // Split the part into question and options
+                const [part_q, part_opt] = part.split('!@#opt');
+    
+                const firstSpaceIndex = part_q.indexOf('\n');
+                const q_no = part_q.slice(0, firstSpaceIndex);    
+                const question = part_q.slice(firstSpaceIndex + 1);
+            
+    
+                // Split the options part into options and answer
+                const [option_string, ans_string] = part_opt.split('!@#ans');
+    
+                let i = 0;
+                let answer = ans_string[i];
+                while (!['a', 'b', 'c', 'd', 'A', 'B', 'C', 'D'].includes(answer)) {
+                    i++;
+                    answer = ans_string[i];
+                }
+    
+                // Split options into an array
+                const option_list = option_string.split('\n');
+    
+                // Convert options to a dictionary
+                const options_dict = {};
+                for (const option of option_list) {
+                    if (option.length > 1) {
+                        options_dict[option[0]] = option.slice(2);
+                    }
+                }
+    
+    
+                const questionObj = {
+                    question_no: parseInt(q_no),
+                    question: question.trim(),
+                    options: options_dict,
+                    correct: answer
+                };
+    
+                // Add the object element to Q_list
+                Q_list.push(questionObj);
+    
+                // console.log(list_element);
+            } catch (error) {
+                console.error('Error parsing part:', part);
+            }
+        }
+    }
+    return Q_list
+}
+
+
+
+
+
 
 
 

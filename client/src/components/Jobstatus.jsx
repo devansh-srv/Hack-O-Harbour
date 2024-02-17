@@ -6,7 +6,7 @@ const Jobstatus = () => {
 
   const {id} = useLocation();
   const getData = async () => {
-    const response = await fetch(`http://localhost:3000/jobstatus:${id}`, {
+    const response = await fetch(`http://localhost:3000/jobstatus:googlebackend`, {
       method: "GET",
     });
 

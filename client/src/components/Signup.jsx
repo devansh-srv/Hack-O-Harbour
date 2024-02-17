@@ -25,14 +25,20 @@ const Signup = () => {
     })
 
     if(response.status == 200){
-      nav(-1);
+      if(SType === 'applicant'){
+        localStorage.setItem('applicant', JSON.stringify(Semail));
+        nav('/applicant')
+      }else{
+        localStorage.setItem('Company', JSON.stringify(Semail));
+        localStorage.setItem('CompanyName', JSON.stringify(SUsername));
+        nav('/company')
+      }
     }
   }
 
   return(
     <div className="signup">
       <h1>SignUp</h1>
-      <form className="scontainer">
       <label className="sl">
         <p>Username</p>
         <input className="binp" type="text" onChange={(e) => setUsername(e.target.value)} />
@@ -49,14 +55,13 @@ const Signup = () => {
         <p>Signup as a :</p> 
         <select className="ss" name="mode" id="mode" onChange={(e) => setType(e.target.value)}>
           <option value="none">none</option>
-          <option value="recruiter">recruiter</option>
+          <option value="company">company</option>
           <option value="applicant">applicant</option>
         </select>
       </label>
       <div >
         <button className="sb" type="submit" onClick={submit}>Submit</button>
       </div>
-    </form>
     </div>
   )
 }

@@ -56,15 +56,11 @@ app.post('/signup', async (req, res) => {
 app.get('/company:cname', async (req, res) => {
 
   let companyName = req.params.cname.slice(1);
+  console.log(companyName);
   const jobs = db.collection('jobs');
-  const jobsarr = await jobs.find({company: companyName}).toArray();
+  const jobsarr = await jobs.find({Company: companyName}).toArray();
 
-  if(jobsarr.length != 0){
     res.status(200).json(jobsarr);
-  }else{
-    res.status(404).json("companynotfound");
-  }
-
 })
 
 app.post('/createjob', (req, res) => {
@@ -191,9 +187,10 @@ app.get('/jobstatus:id', async (req, res) => {
   const jobID = req.params.id;
   const jobsarr = await db.collection('jobs').find({}).toArray();
 
-  foundjob = jobsarr.find(x => x.ID = jobID);
+  foundjob = jobsarr.find(x => x.ID === jobID);
   if(foundjob){
-    res.status(200).json(foundjob.participants);
+    const dataToSend = (foundjob.participants).sort((a,b) => b.score - a.score)
+    res.status(200).json(dataToSend);
   }else{
     res.status(404).send("job not found");
   }

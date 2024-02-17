@@ -7,7 +7,7 @@ const Createjob = () => {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [jobID, setID] = useState("");
-  const company = JSON.parse(localStorage.getItem('Company'));
+  const company = JSON.parse(localStorage.getItem('CompanyName'));
 
   const submit = async () => {
     const response = await fetch('http://localhost:3000/createjob', {

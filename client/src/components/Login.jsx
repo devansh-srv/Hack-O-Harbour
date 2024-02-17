@@ -7,6 +7,7 @@ const Login = () => {
 
   const [Uemail, setEmail] = useState("");
   const [Upassword, setPassword] = useState("");
+  const nav = useNavigate();
 
   const submit = async () => {
     const response = await fetch('http://localhost:3000/login', {
@@ -26,8 +27,11 @@ const Login = () => {
       console.log("login success");
       if(json.type == 'company'){
         localStorage.setItem('Company', JSON.stringify(json.email));
+        localStorage.setItem('CompanyName', JSON.stringify(json.username));
+        nav('/company')
       }else{
         localStorage.setItem('applicant', JSON.stringify(json.email));
+        nav('/applicant');
       }
     }
     else{

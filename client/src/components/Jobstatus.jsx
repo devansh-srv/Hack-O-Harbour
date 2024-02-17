@@ -1,13 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const Jobstatus = () => {
-  const [data, setData] = useState([
-    {  name: 'vansh', mail:"Vanshjangir@gamil.com",score:"99%",  },
-    {  name: 'harshit', mail:"harshit@gamil.com",score:"65%",  },
-    {  name: 'devansh', mail:"devansh@gamil.com",score:"92%",  },
-    
-  ]);
+  const [data, setData] = useState([]);
 
+  const {id} = useLocation();
+  const getData = async () => {
+    const response = await fetch(`http://localhost:3000/jobstatus:${id}`, {
+      method: "GET",
+    });
+
+    const json = await response.json();
+    if(response.status === 200){
+      setData(json);
+    }
+  }
+
+  useEffect(()=>{
+    getData();
+  },[]);
 
 
   // data=data.sort((a, b) => a.score - b.score);

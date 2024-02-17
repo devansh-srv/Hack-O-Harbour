@@ -1,0 +1,56 @@
+.signup {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #00d4b8; /* Light orange or cream color background */
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .scontainer {
+    height: 70vh;
+    width : 55vh;
+    background-color: white; /* Brighter orange color for the sign-up box */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  h1 {
+    text-align: center;
+    color: #333;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .sl {
+    margin-bottom: 10px;
+  }
+  
+  .binp,
+  .ss {
+    width: 90%;
+    padding: 6px;
+    margin-top: 1px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .sb {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .sb:hover {
+    background-color: #555;
+  }
+  

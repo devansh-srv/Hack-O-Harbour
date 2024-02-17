@@ -1,3 +1,4 @@
+from PyPDF2 import PdfReader
 import docx2txt
 import nltk
 import warnings
@@ -15,8 +16,11 @@ from gensim.models import Word2Vec
 from gensim.models import KeyedVectors
 resume_path = sys.argv[1]
 job_path = sys.argv[2]
-resume  = docx2txt.process(resume_path)
-job = docx2txt.process(job_path)
+resume = PdfReader(resume_path).pages[0].extract_text()
+job =  PdfReader(job_path).pages[0].extract_text()
+
+# resume_read = PdfReadresume  = docx2txt.process(resume_path)
+# job = docx2txt.process(job_path)
 def preprocess_text(text):
   tokens = word_tokenize(text.lower())
   stop_words = set(stopwords.words('english'))

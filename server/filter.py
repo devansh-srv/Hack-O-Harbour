@@ -63,7 +63,7 @@ if resume_vectors and job_description_vectors:
     similarity_score = cosine_similarity([resume_vector], [job_description_vector])[0, 0]
     similarity_percentage = (similarity_score) * 100
     similarity_percentage = round(similarity_percentage,2)
-    print(similarity_percentage)
+    print(similarity_percentage,end="")
     # print("Similarity Percentage:", similarity_percentage)
 else:
     print("No vectors found for tokens.")
